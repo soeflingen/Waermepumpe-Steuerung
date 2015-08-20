@@ -1,0 +1,2 @@
+Diese Arduino Programm ist aus verschiedenen Beispielen im Internet zusammengestellt.
+Es ist nur als Anschauengsmaterial gedacht, steuert aber meine Waermepumpe als 2-Punkt Regler.

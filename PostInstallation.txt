@@ -1,0 +1,2 @@
+Die Datei in der Arduino Oberfläche öffnen. Verwendet wurde 1.0.5.
+Viel Spass!!!

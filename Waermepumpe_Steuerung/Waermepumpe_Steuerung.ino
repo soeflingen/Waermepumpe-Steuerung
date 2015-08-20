@@ -1,7 +1,7 @@
 
 
 //##############################################
-//#Steuerung der Waermepumpe
+//# Waermepumpe Steuerungs
 //# P. Foschum, 1.8.2015
 //##############################################
 //#
@@ -15,7 +15,7 @@ http://playground.arduino.cc/Code/PCD8544
 
 #include <OneWire.h>
 
-// OneWire DS18S20, DS18B20, DS1822 Temperature Example
+// OneWire c, DS18B20, DS1822 Temperature Example
 //
 // http://www.pjrc.com/teensy/td_libs_OneWire.html
 //
@@ -363,7 +363,7 @@ float  ReadTempSensor(void)
 }
 
 /*///////////////////////////////////////////////////////////////////////////
-*  floatToString.h
+*  floatToString.h - Aus einem Forum.
 *
 *  Usage: floatToString(buffer string, float value, precision, minimum text width)
 *
@@ -459,13 +459,13 @@ void setup(void)
   gotoXY(0,0);
   LcdString("Thermcontrol");
   gotoXY(0,1);
-  LcdString("V1.1");
+  LcdString("V1.2");
   gotoXY(0,2);
   LcdString("P. Foschum");
   gotoXY(0,3);
   LcdString("1.8.2015-");
   gotoXY(0,4);
-  LcdString(" 2.8.2015");
+  LcdString(" 3.8.2015");
   delay(3000);
   LcdClear();
   
@@ -582,12 +582,34 @@ void loop(void)
       Serial.print("  An: ");
       Serial.print(ausgabe_on);
       Serial.print("  Aus: ");
-      Serial.println(ausgabe_off);
+      Serial.print(ausgabe_off);
 
 
  
 // LCD Ausgabe  /////////////////////////////////////////////
 //  LcdClear();
+  
+  gotoXY(0,4);
+  LcdString("= 1:");
+  f_onTimePostVerhaeltnis = float(ul_offTimePost_s) / float(ul_onTimePost_s);
+  if ( (f_onTimePostVerhaeltnis > 1000) || (f_onTimePostVerhaeltnis < 0,0001) ){
+    f_onTimePostVerhaeltnis = -1;
+  }
+  LcdString(floatToString(charBuf, f_onTimePostVerhaeltnis, 3, 5));
+  
+  gotoXY(0,3);
+  LcdString("Aus ");
+  ausgabe_off.toCharArray(charBuf, 25);
+  LcdString(charBuf);
+  
+  gotoXY(0,2);
+  LcdString("An  ");
+  ausgabe_on.toCharArray(charBuf, 25);
+  LcdString(charBuf);
+  
+  gotoXY(0,1);
+  LcdString("Aggregat ");
+  LcdString(cp_Ausgang_aktuell);
   
   gotoXY(0,0);
   LcdString("Temp. ");
@@ -595,27 +617,8 @@ void loop(void)
   LcdString(floatToString(c_temperatur, f_temperatur, 2, 5) );
   LcdString("C");
   
-  gotoXY(0,1);
-  LcdString("Aggregat ");
-  LcdString(cp_Ausgang_aktuell);
-  
-  gotoXY(0,3);
-  LcdString("An  ");
-  ausgabe_on.toCharArray(charBuf, 25);
-  LcdString(charBuf);
-  
-  
-  gotoXY(0,4);
-  LcdString("Aus ");
-  ausgabe_off.toCharArray(charBuf, 25);
-  LcdString(charBuf);
-  
-  gotoXY(0,5);
-  LcdString("= 1:");
-  f_onTimePostVerhaeltnis = float(ul_offTimePost_s) / float(ul_onTimePost_s);
-  LcdString(floatToString(charBuf, f_onTimePostVerhaeltnis, 3, 5));
-  
-  
+      Serial.print("  Verhältnis 1: ");
+      Serial.println(f_onTimePostVerhaeltnis);
   
   
   // Verzögerung
